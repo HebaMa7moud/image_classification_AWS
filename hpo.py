@@ -30,11 +30,15 @@ def test(model, test_loader, loss_criterion):
     with torch.no_grad():
         for data, target in test_loader:
             output = model(data)
-            test_loss += loss_criterion(output, target, reduction="sum").item()
-            pred = output.argmax(dim=1, keepdim=True)
-            correct += pred.eq(target.view_as(pred)).sum().item()
-        test_loss /= len(test_loader.dataset)
-        logger.info("Test set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n".format(test_loss, correct,           len(test_loader.dataset), 100.0 * correct / len(test_loader.dataset)))
+            loss = loss_criterion(output, target)
+            test_loss += loss.item() * data.size(0)
+            _, preds = torch.max(output, 1)
+            correct += torch.sum(preds == target.data)
+        total_loss = test_loss / len(test_loader.dataset)
+        total_acc = correct/ len(test_loader.dataset)
+        
+        logger.info(f"Testing Loss: {total_loss}")
+        logger.info(f"Test Accuracy: {total_acc}")
 
 
     '''
@@ -45,18 +49,56 @@ def test(model, test_loader, loss_criterion):
 
 
 
-def train(model, train_loader, test_loader, loss_criterion, optimizer, epochs):
-    for epoch in range(1, epochs +1):
-        model.train()
-        for batch_idx, (data, target) in enumerate(train_loader):
-            optimizer.zero_grad()
-            output = model(data)
-            loss = loss_criterion(output, target)
-            loss.backward()
-            optimizer.step()
-            if batch_idx % 100 == 0:
-                logger.info("Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}".format(epoch, batch_idx * len(data), len(train_loader.dataset), 100.0 * batch_idx / len(train_loader), loss.item()))
-        test(model, test_loader, loss_criterion)
+def train(model, epochs,train_loader, validation_loader, loss_criterion, optimizer):
+    epochs=epochs
+    best_loss=1e6
+    image_data= {'train':train_loader, 'valid':validation_loader}
+    loss_count = 0
+
+    for epoch in range(epochs):
+        logger.info("Epoch".format(epoch))
+        for img_dataset in ['train', 'valid']:
+            if img_dataset== 'train':
+                model.train()
+            else:
+                model.eval()
+            running_loss = 0
+            corrects = 0
+            for data, target in image_data[img_dataset]:
+                output = model(data)
+                loss = loss_criterion(output, target)
+                if img_dataset=='train':
+                    optimizer.zero_grad()
+                    loss.backward()
+                    optimizer.step()
+
+
+                running_loss += loss.item() * data.size(0)
+                _, preds = torch.max(output, 1)
+                corrects += torch.sum(preds == target.data)
+
+            epoch_loss = running_loss / len(image_data[img_dataset].dataset)
+            epoch_acc = corrects / len(image_data[img_dataset].dataset)
+
+            if img_dataset=='valid':
+                if epoch_loss<best_loss:
+                    best_loss=epoch_loss
+                else:
+                    loss_count +=1
+
+            logger.info('{} loss: {:.4f}, acc: {:.4f}, best loss: {:.4f}'.format(img_dataset,
+                                                                                 epoch_loss,
+                                                                                 epoch_acc,
+                                                                                 best_loss))
+            print(epochs)
+        if loss_count==1:
+            break
+        if epoch ==0:
+            break
+    return model
+
+
+
     '''
     TODO: Complete this function that can take a model and
           data loaders for training and will get train the model
@@ -70,7 +112,9 @@ def net():
     for param in model.parameters():
         param.requires_grad = False
 
-    model.fc = nn.Sequential(nn.Linear(num_features, 133))
+    model.fc = nn.Sequential(nn.Linear(2048, 128),
+                             nn.ReLU(inplace=True),
+                             nn.Linear(128, 133))
 
     return model
 
@@ -84,18 +128,27 @@ def create_train_loader(data_dir, batch_size):
     #data_dir = "dogbread"
 
     logger.info("Get train data loader")
+    logger.info("Get validation data loader")
     ImageFile.LOAD_TRUNCATED_IMAGES = True
     training_dir = os.path.join(data_dir, "train/")
+    valid_dir = os.path.join(data_dir, "valid/")
+
     train_transform = transforms.Compose([transforms.RandomResizedCrop((224,224)),
                                           transforms.RandomHorizontalFlip(),
+                                          transforms.ToTensor()])
+
+    valid_transform = transforms.Compose([transforms.Resize((224, 224)),
                                           transforms.ToTensor()])
 
     train_data = datasets.ImageFolder(training_dir, transform = train_transform)
     train_loader = torch.utils.data.DataLoader(train_data, batch_size= batch_size, shuffle=True)
 
-    return train_loader
+    validation_data = datasets.ImageFolder(valid_dir, transform=valid_transform)
+    validation_loader  = torch.utils.data.DataLoader(validation_data, batch_size=batch_size, shuffle=True)
 
-def create_test_loader(data_dir, test_batch_size):
+    return train_loader, validation_loader
+
+def create_test_loader(data_dir, batch_size):
 
     logger.info("Get test data loader")
     ImageFile.LOAD_TRUNCATED_IMAGES = True
@@ -104,7 +157,7 @@ def create_test_loader(data_dir, test_batch_size):
                                          transforms.ToTensor()])
 
     test_data = datasets.ImageFolder(test_dir, transform = test_transform)
-    test_loader = torch.utils.data.DataLoader(test_data, batch_size= test_batch_size)
+    test_loader = torch.utils.data.DataLoader(test_data, batch_size= batch_size, shuffle=True)
 
     return test_loader
 
@@ -135,9 +188,9 @@ def main(args):
     Remember that you will need to set up a way to get training data from S3
     '''
 
-    train_loader = create_train_loader(args.data_dir, args.batch_size)
-    test_loader = create_test_loader(args.data_dir, args.test_batch_size)
-    model=train(model, train_loader, test_loader, loss_criterion, optimizer, args.epochs)
+    train_loader, validation_loader = create_train_loader(args.data_dir, args.batch_size)
+    test_loader = create_test_loader(args.data_dir, args.batch_size)
+    model=train(model,args.epochs, train_loader, validation_loader, loss_criterion, optimizer)
 
     '''
     TODO: Test the model to see its accuracy
@@ -159,34 +212,20 @@ if __name__=='__main__':
     TODO: Specify all the hyperparameters you need to use to train your model.
     '''
     parser.add_argument(
+        "--epochs", type=int, default=5, metavar="E", help="learning rate (default: 5)"
+    )
+    parser.add_argument(
         "--batch-size",
         type=int,
         default=64,
         metavar="N",
-        help="input batch size for training (default: 64)",
+        help="input batch size for training (default: 64)"
     )
-    parser.add_argument(
-        "--test-batch-size",
-        type=int,
-        default=1000,
-        metavar="N",
-        help="input batch size for testing (default: 1000)",
-    )
-    parser.add_argument(
-        "--epochs",
-        type=int,
-        default=5,
-        metavar="N",
-        help="number of epochs to train (default: 10)",
-    )
+
+
     parser.add_argument(
         "--lr", type=float, default=0.01, metavar="LR", help="learning rate (default: 0.01)"
     )
-    """
-    parser.add_argument(
-        "--momentum", type=float, default=0.5, metavar="M", help="SGD momentum (default: 0.5)")
-    """
-
     # Container environment
     parser.add_argument("--hosts", type=list, default=json.loads(os.environ["SM_HOSTS"]))
     parser.add_argument("--current-host", type=str, default=os.environ["SM_CURRENT_HOST"])
