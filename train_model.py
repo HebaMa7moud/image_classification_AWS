@@ -14,21 +14,21 @@ from torchvision import datasets, transforms
 from PIL import ImageFile
 
 import time
+
 import smdebug.pytorch as smd
 import argparse
 
 
 #TODO: Import dependencies for Debugging andd Profiling
-from smdebug import modes
+#from smdebug import modes
 from smdebug.profiler.utils import str2bool
-from smdebug.pytorch import get_hook
+#from smdebug.pytorch import get_hook
 
 def test(model, test_loader, loss_criterion, hook):
     
-    hook = get_hook(create_if_not_exists=True)
-    if hook:
-        hook.set_mode(modes.EVAL)
     model.eval()
+    hook.set_mode(smd.modes.EVAL)
+    
     test_loss=0
     correct=0
     with torch.no_grad():
@@ -67,13 +67,12 @@ def train(model, epochs, train_loader, validation_loader, loss_criterion, optimi
         for img_dataset in ['train', 'valid']:
             if img_dataset== 'train':
                 print("START TRAINING")
-                if hook:
-                    hook.set_mode(modes.TRAIN)
                 model.train()
+                hook.set_mode(smd.modes.TRAIN)
             else:
-                if hook:
-                    hook.set_mode(modes.EVAL)
                 model.eval()
+                hook.set_mode(smd.modes.EVAL)
+            
             running_loss = 0
             corrects = 0
             for data, target in image_data[img_dataset]:
