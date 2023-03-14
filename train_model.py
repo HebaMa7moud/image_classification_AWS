@@ -12,16 +12,25 @@ import torchvision
 import torchvision.models as models
 from torchvision import datasets, transforms
 from PIL import ImageFile
-
+#from smdebug.profiler.utils import str2bool
 import time
-
-import smdebug.pytorch as smd
 import argparse
+
+
+try:
+    import smdebug.pytorch as smd 
+except ImportError: 
+    print("smdebug module not found") 
+except ModuleNotFoundError: 
+    print("smdebug module not found")
+
+#import smdebug.pytorch as smd
+
 
 
 #TODO: Import dependencies for Debugging andd Profiling
 #from smdebug import modes
-from smdebug.profiler.utils import str2bool
+
 #from smdebug.pytorch import get_hook
 
 def test(model, test_loader, loss_criterion, hook):

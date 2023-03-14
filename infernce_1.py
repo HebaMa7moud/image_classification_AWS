@@ -16,6 +16,12 @@ logger.addHandler(logging.StreamHandler(sys.stdout))
 JSON_CONTENT_TYPE = 'application/json'
 JPEG_CONTENT_TYPE = 'image/jpeg'
 
+try: 
+    import smdebug.pytorch as smd 
+except ImportError: 
+    print("smdebug module not found") 
+except ModuleNotFoundError: 
+    print("smdebug module not found")
 
 # Based on https://github.com/pytorch/examples/blob/master/mnist/main.py
 def Net():
