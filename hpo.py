@@ -203,7 +203,7 @@ def main(args):
     TODO: Save the trained model
     '''
     logger.info("saving the model.")
-    path = os.path.join(args.model_dir, "resnet50_model.pth")
+    path = os.path.join(args.model_dir, "model.pth")
     torch.save(model.cpu().state_dict(), path)
 
 if __name__=='__main__':
@@ -227,11 +227,11 @@ if __name__=='__main__':
         "--lr", type=float, default=0.01, metavar="LR", help="learning rate (default: 0.01)"
     )
     # Container environment
-    parser.add_argument("--hosts", type=list, default=json.loads(os.environ["SM_HOSTS"]))
-    parser.add_argument("--current-host", type=str, default=os.environ["SM_CURRENT_HOST"])
+    
+   
     parser.add_argument("--model-dir", type=str, default=os.environ["SM_MODEL_DIR"])
     parser.add_argument("--data-dir", type=str, default=os.environ["SM_CHANNEL_TRAINING"])
-    parser.add_argument("--num-gpus", type=int, default=os.environ["SM_NUM_GPUS"])
+    parser.add_argument('--output_dir', type=str, default=os.environ['SM_OUTPUT_DATA_DIR'])
 
 
     args=parser.parse_args()

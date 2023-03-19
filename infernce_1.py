@@ -16,12 +16,16 @@ logger.addHandler(logging.StreamHandler(sys.stdout))
 JSON_CONTENT_TYPE = 'application/json'
 JPEG_CONTENT_TYPE = 'image/jpeg'
 
+
+"""
 try: 
     import smdebug.pytorch as smd 
 except ImportError: 
     print("smdebug module not found") 
 except ModuleNotFoundError: 
     print("smdebug module not found")
+"""
+
 
 # Based on https://github.com/pytorch/examples/blob/master/mnist/main.py
 def Net():
@@ -49,12 +53,13 @@ def model_fn(model_dir):
     with open(os.path.join(model_dir, "model.pth"), "rb") as f:
         print("Loading the dog-classifier model")
         checkpoint = torch.load(f , map_location =device)
+        #checkpoint = torch.jit.load(f , map_location =device)
         model.load_state_dict(checkpoint)
         print('MODEL-LOADED')
         logger.info('model loaded successfully')
     model.eval()
     return model
-
+#model = torch.jit.load(model_path, map_location=device)
 
 
 
@@ -94,7 +99,7 @@ def predict_fn(input_object, model):
         prediction = model(input_object.unsqueeze(0))
     return prediction
 
-'''
+"""
 # postprocess
 def output_fn(predictions, content_type):
     assert content_type == "application/json"
@@ -108,4 +113,5 @@ def output_fn(prediction, accept=JSON_CONTENT_TYPE):
         logger.debug(f'Returning response {json.dumps(prediction)}')
         return json.dumps(prediction), accept
     raise Exception('Requested unsupported ContentType in Accept: {}'.format(accept))
-'''
+
+"""
