@@ -60,11 +60,11 @@ Model debugging and profiling are performed using 6 steps:
 
 An inference script is created to implements the following functions to get a prediction; Net function, the model_fn function(calls the loaded model saved after retraining hpo.py script using finetuned parameters), input_fn function (process the image/url uploaded to the endpoint) and predict_fn function.
 
-The instructions on how to query the endpoint is as follow: using the right method to 
-The following image is used to query the the end point:
+The instructions on how to query the endpoint is as follow:
+Read a random image given by url or uploaded from dogImages/test/ directory and call the predict method of our predictor with the input image. We can then parse the result for the answer. Url and an uploaded image are used to query the endpoint and sample input of uploaded image is given below:
 ![image](https://user-images.githubusercontent.com/81697137/226215650-08218eb0-c548-4a86-8fac-93432c78c322.png)
 
-and the prediction was correct:51 which refer to 051.Chow_chow images
+The result of quering the endpoint was correct (the answer was 51) which refer to 051.Chow_chow images.
  
  
 
