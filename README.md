@@ -17,13 +17,29 @@ Upload the data to an S3 bucket through the AWS Gateway so that SageMaker has ac
 ### PROJECT INTRODUCTION
 The project name is: Image classification using AWS sagemaker. This project is using AWS sagemaker to finetune a pretrained model that can perform image classification
 on dog breed classification dataset found here  to classify between different breeds of dogs in images. The dataset contains images from 133 dog breeds divided into training, testing and validation datasets.
+
 This project is devided on 3 main tasks:
+
 1- Data preparation, Fetch and upload the data to AWS S3.
+
 2- Training and include the following steps:
+
        1. finetuning a pretrainded model (ResNet50 model is the used model) to find the best hyperparameters.
        2. Using the best hyperparameters and train and finetune a new model and monitor its performance using model debugging and profiling.
+       
 3- Deploy the optimized model to an endpoint and testing it with a sample image and get a prediction.
+
 The project summarize is givin in the following figure:
+
+### Project Setup Instructions
+Setting up the environment for building the project and preparing your data for training your models as follow:
+
+1.Set up AWS by opening it through the classroom and open sagemaker studio and create a folder for the project
+2. Download the Starter Files by cloning Github RIPO (https://github.com/udacity/CD0387-deep-learning-topics-within-computer-vision-nlp-project-starter) and uploading starter files to workspace.
+3. Preparing data by downloading dog breed classification data and uploading it to S3 bucket.
+4. Installing the necessary packages  for this project's execution:smdebug, jinja2, sagemaker,boto3, sagemaker.tuner, sagemaker.pytorch, sagemaker.debugger
+
+
 
 
 
