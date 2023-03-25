@@ -34,10 +34,26 @@ The project summarize is givin in the following figure:
 ### Project Setup Instructions
 Setting up the environment for building the project and preparing your data for training your models as follow:
 
-1.Set up AWS by opening it through the classroom and open sagemaker studio and create a folder for the project
+1.Set up AWS by opening it through the classroom and open sagemaker studio and create a folder for the project.
+
 2. Download the Starter Files by cloning Github RIPO (https://github.com/udacity/CD0387-deep-learning-topics-within-computer-vision-nlp-project-starter) and uploading starter files to workspace.
+
 3. Preparing data by downloading dog breed classification data and uploading it to S3 bucket.
-4. Installing the necessary packages  for this project's execution:smdebug, jinja2, sagemaker,boto3, sagemaker.tuner, sagemaker.pytorch, sagemaker.debugger
+
+4. Installing the necessary packages  for this project's execution: smdebug, jinja2, sagemaker,boto3, torchvision,etc.
+
+
+### Explanations of the different files used in the project
+
+1. train_and_deploy.ipynb: Jupyter notebook used to install packages for project's execution, fetch data, define hyperparameters ranges to finetune a pretrained model    with hyperparameter tuning, extract best hyperparameters, train model with best hyperparameters,  create profiler and debugger reports, deploy models and query the    endpoint.
+
+2. hpo.py: Python training script used to finetune a pretrained model with hyperparameter tuning.
+
+3. train_model.py: Python training script that is trained using best hyperparameters and used to perform model profiling and debugging.
+
+4. infernce_1.py: Python script that implements the following functions to  get a prediction: model_fn function that calls the loaded model, input_fn function to      process input and  and predict_fn function to customize how the model server gets predictions from the loaded model.
+
+
 
 
 
@@ -90,8 +106,11 @@ Model debugging and profiling are performed using 6 steps:
 An inference script is created to implements the following functions to get a prediction; Net function, the model_fn function(calls the loaded model saved after retraining hpo.py script using finetuned parameters), input_fn function (process the image/url uploaded to the endpoint) and predict_fn function.
 
 The instructions on how to query the endpoint is as follow:
-Read a random image given by url or uploaded from dogImages/test/ directory and call the predict method of our predictor with the input image. We can then parse the result for the answer. Url and an uploaded image are used to query the endpoint and sample input of uploaded image is given below:
+Read a random image given by url or uploaded from dogImages/test/ directory and call the predict method of our predictor with the input image. We can then parse the result for the answer.
 ![image](https://user-images.githubusercontent.com/81697137/226215650-08218eb0-c548-4a86-8fac-93432c78c322.png)
+
+The previous image is passed to the next code to give a prediction:
+![code](https://user-images.githubusercontent.com/81697137/227739686-c034ae50-db6b-4528-aa0f-14a9b5b5e66d.png)
 
 The result of quering the endpoint was correct (the answer was 51) which refer to 051.Chow_chow images.
  
