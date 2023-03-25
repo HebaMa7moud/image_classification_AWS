@@ -14,6 +14,19 @@ The project is designed to be dataset independent so if there is a dataset that 
 ### Access
 Upload the data to an S3 bucket through the AWS Gateway so that SageMaker has access to the data. 
 
+### PROJECT INTRODUCTION
+The project name is: Image classification using AWS sagemaker. This project is using AWS sagemaker to finetune a pretrained model that can perform image classification
+on dog breed classification dataset found here  to classify between different breeds of dogs in images. The dataset contains images from 133 dog breeds divided into training, testing and validation datasets.
+This project is devided on 3 main tasks:
+1- Data preparation, Fetch and upload the data to AWS S3.
+2- Training and include the following steps:
+       1. finetuning a pretrainded model (ResNet50 model is the used model) to find the best hyperparameters.
+       2. Using the best hyperparameters and train and finetune a new model and monitor its performance using model debugging and profiling.
+3- Deploy the optimized model to an endpoint and testing it with a sample image and get a prediction.
+The project summarize is givin in the following figure:
+
+
+
 ## Hyperparameter Tuning
 What kind of model did you choose for this experiment and why? Give an overview of the types of parameters and their ranges used for the hyperparameter search
 
