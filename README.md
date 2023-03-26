@@ -16,7 +16,7 @@ Upload the data to an S3 bucket through the AWS Gateway so that SageMaker has ac
 
 ### PROJECT INTRODUCTION
 The project name is: Image classification using AWS sagemaker. This project is using AWS sagemaker to finetune a pretrained model that can perform image classification
-on dog breed classification dataset found here  to classify between different breeds of dogs in images. The dataset contains images from 133 dog breeds divided into training, testing and validation datasets.
+on dog breed classification dataset to classify between different breeds of dogs in images. The dataset contains images from 133 dog breeds divided into training, testing and validation datasets.
 
 This project is devided on 3 main tasks:
 
