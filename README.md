@@ -94,7 +94,19 @@ Model debugging and profiling are performed using 6 steps:
 
 ### Results
 **TODO**: What are the results/insights did you get by profiling/debugging your model?
-![debug_profileresults](https://user-images.githubusercontent.com/81697137/226156234-249ccf25-8e8d-43b4-a3ee-51282dd5a75c.png)
+
+The result of model debugging:
+![image](https://user-images.githubusercontent.com/81697137/227808204-037cb10e-6339-4750-b42d-3ca8ca428407.png)
+
+While my training job is still running, I open the SageMaker Debugger Insights dashboard so I can see details of system metrics and Rules my training job and there is what I got under system metrics:
+
+![001](https://user-images.githubusercontent.com/81697137/227809053-cec68431-c7b8-4e64-b7af-4df3ea7b7d18.png)
+-At the beggining of training job the CPU memory utilization mean value were at high percentage, but after that it is flat at around 50%. 
+-And there is an issue found in  PoorWeightInitialization Rule.
+-And there was another observation the training job took 1383 seconds.
+All the previous observations could be solved by increasing instance type but it's a tradeoff, and could be accepted for restricted budget case, but the good news is the test Accuracy which is 66.1483%.
+There is another way to check system metrics and Rules summary of my training job which is after the training job is completed by checking SageMaker Debugger Profiling Report, in Rule summary section there is an issue found in BatchSize, despite this issue doesn't exist in SageMaker Debugger Insights dashboardand, and the recommandation was The batch size is too small, and GPUs are underutilized. Consider running on a smaller instance type or increasing the batch size. This issue is not reasonable since we are using best hyperparameters so I think it is due to no gpus installed.
+
 
 
 **TODO** Remember to provide the profiler html/pdf file in your submission.
@@ -109,10 +121,12 @@ The instructions on how to query the endpoint is as follow:
 Read a random image given by url or uploaded from dogImages/test/ directory and call the predict method of our predictor with the input image. We can then parse the result for the answer.
 ![image](https://user-images.githubusercontent.com/81697137/226215650-08218eb0-c548-4a86-8fac-93432c78c322.png)
 
+
 The previous image is passed to the next code to give a prediction:
 ![code](https://user-images.githubusercontent.com/81697137/227749040-ea394c4b-3b49-410c-86c5-5deb991b275d.png)
 
-The result of quering the endpoint was correct (the answer was 51) which refer to 051.Chow_chow images.
+The result of quering the endpoint:
+
  
  
 
