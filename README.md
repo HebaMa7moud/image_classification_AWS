@@ -125,14 +125,18 @@ An inference script is created to implements the following functions to get a pr
 
 The instructions on how to query the endpoint is as follow:
 Read a random image given by url or uploaded from dogImages/test/ directory and call the predict method of our predictor with the input image. We can then parse the result for the answer.
-![image](https://user-images.githubusercontent.com/81697137/226215650-08218eb0-c548-4a86-8fac-93432c78c322.png)
 
 
-The previous image is passed to the next code to give a prediction:
+
+Code sample for querying a model endpoint:
 ![code](https://user-images.githubusercontent.com/81697137/227749040-ea394c4b-3b49-410c-86c5-5deb991b275d.png)
 
 The result of quering the endpoint:
-![querysamples](https://user-images.githubusercontent.com/81697137/227811899-5bc93a69-76a1-4b6d-8b63-8c183e827d66.png)
+
+![dog1](https://user-images.githubusercontent.com/81697137/227812905-c5249ecf-dcf1-4fce-9c4f-aca6f2fd5265.png)
+
+![dog2](https://user-images.githubusercontent.com/81697137/227812921-38b68fc3-3fec-48ad-9e96-5524efaf7c5d.png)
+
 
  
  
