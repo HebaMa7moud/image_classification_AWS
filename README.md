@@ -29,7 +29,7 @@ This project is devided on 3 main tasks:
        
 3- Deploy the optimized model to an endpoint and testing it with a sample image and get a prediction.
 
-The project summarize is givin in the following figure:
+
 
 ### Project Setup Instructions
 Setting up the environment for building the project and preparing your data for training your models as follow:
@@ -40,7 +40,8 @@ Setting up the environment for building the project and preparing your data for 
 
 3. Preparing data by downloading dog breed classification data and uploading it to S3 bucket.
 
-4. Installing the necessary packages  for this project's execution: smdebug, jinja2, sagemaker,boto3, torchvision,etc.
+4. Installing the necessary packages  for this project's execution: smdebug, jinja2, sagemaker,boto3, torchvision,PIL, numpy,matplotlib.pyplot, mpl_toolkits.
+   
 
 
 ### Explanations of the different files used in the project
@@ -102,9 +103,14 @@ While my training job is still running, I open the SageMaker Debugger Insights d
 
 ![001](https://user-images.githubusercontent.com/81697137/227809053-cec68431-c7b8-4e64-b7af-4df3ea7b7d18.png)
 -At the beggining of training job the CPU memory utilization mean value were at high percentage, but after that it is flat at around 50%. 
+
 -And there is an issue found in  PoorWeightInitialization Rule.
+
 -And there was another observation the training job took 1383 seconds.
+
 All the previous observations could be solved by increasing instance type but it's a tradeoff, and could be accepted for restricted budget case, but the good news is the test Accuracy which is 66.1483%.
+
+
 There is another way to check system metrics and Rules summary of my training job which is after the training job is completed by checking SageMaker Debugger Profiling Report, in Rule summary section there is an issue found in BatchSize, despite this issue doesn't exist in SageMaker Debugger Insights dashboardand, and the recommandation was The batch size is too small, and GPUs are underutilized. Consider running on a smaller instance type or increasing the batch size. This issue is not reasonable since we are using best hyperparameters so I think it is due to no gpus installed.
 
 
@@ -126,6 +132,7 @@ The previous image is passed to the next code to give a prediction:
 ![code](https://user-images.githubusercontent.com/81697137/227749040-ea394c4b-3b49-410c-86c5-5deb991b275d.png)
 
 The result of quering the endpoint:
+![querysamples](https://user-images.githubusercontent.com/81697137/227811899-5bc93a69-76a1-4b6d-8b63-8c183e827d66.png)
 
  
  
