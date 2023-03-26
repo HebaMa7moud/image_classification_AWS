@@ -110,7 +110,7 @@ Read a random image given by url or uploaded from dogImages/test/ directory and 
 ![image](https://user-images.githubusercontent.com/81697137/226215650-08218eb0-c548-4a86-8fac-93432c78c322.png)
 
 The previous image is passed to the next code to give a prediction:
-![code](https://user-images.githubusercontent.com/81697137/227739686-c034ae50-db6b-4528-aa0f-14a9b5b5e66d.png)
+![code](https://user-images.githubusercontent.com/81697137/227749040-ea394c4b-3b49-410c-86c5-5deb991b275d.png)
 
 The result of quering the endpoint was correct (the answer was 51) which refer to 051.Chow_chow images.
  
