@@ -111,7 +111,7 @@ While my training job is still running, I open the SageMaker Debugger Insights d
 All the previous observations could be solved by increasing instance type but it's a tradeoff, and could be accepted for restricted budget case, but the good news is the test Accuracy which is 66.1483%.
 
 
-There is another way to check system metrics and Rules summary of my training job which is after the training job is completed by checking SageMaker Debugger Profiling Report, in Rule summary section there is an issue found in BatchSize, despite this issue doesn't exist in SageMaker Debugger Insights dashboardand, and the recommandation was The batch size is too small, and GPUs are underutilized. Consider running on a smaller instance type or increasing the batch size. This issue is not reasonable since we are using best hyperparameters so I think it is due to no gpus installed.
+There is another way to check system metrics and Rules summary of my training job which is after the training job is completed by checking SageMaker Debugger Profiling Report, in Rule summary section there is an issue found in BatchSize, despite this issue doesn't exist in SageMaker Debugger Insights dashboardand, and the recommandation was The batch size is too small, and GPUs are underutilized, Consider running on a smaller instance type or increasing the batch size. This issue is not reasonable since we are using best hyperparameters so I think it is due to no gpus installed.
 
 
 
